@@ -7,4 +7,7 @@ export default defineConfig({
       manifest: "./manifest.json",
     }),
   ],
+  build: {
+    emptyOutDir: true,
+  },
 });

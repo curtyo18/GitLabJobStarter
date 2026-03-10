@@ -5,13 +5,15 @@
   "scripts": {
     "icons": "node scripts/generate-icons.mjs",
     "dev": "vite build --watch --mode development",
-    "build": "vite build"
+    "build": "vite build",
+    "package": "npm run build && node scripts/package-extension.mjs"
   },
   "dependencies": {
     "preact": "^10.25.4"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
+    "archiver": "^7.0.1",
     "@types/chrome": "^0.0.309",
     "typescript": "^5.7.3",
     "vite": "^6.2.1",

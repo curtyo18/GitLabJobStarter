@@ -4,6 +4,9 @@ import { GroupList } from "./components/GroupList";
 import { StandaloneList } from "./components/StandaloneList";
 import { getTestMode, setTestMode } from "../shared/storage";
 
+// update_url is only present in store-installed extensions, never in unpacked
+const isUnpacked = !chrome.runtime.getManifest().update_url;
+
 export function App() {
   const { data, save } = useStorage();
   const [testMode, setTestModeState] = useState(false);
@@ -31,7 +34,7 @@ export function App() {
         <p class="subtitle">Configure job patterns to auto-start on pipeline pages.</p>
       </header>
       <main>
-        <div class={`test-mode-bar ${testMode ? "active" : ""}`}>
+        {isUnpacked && <div class={`test-mode-bar ${testMode ? "active" : ""}`}>
           <div class="test-mode-label">
             <span class="test-mode-title">Test Mode</span>
             <span class="test-mode-desc">
@@ -48,8 +51,8 @@ export function App() {
             />
             <span class="toggle-track" />
           </label>
-        </div>
-        <hr />
+        </div>}
+        {isUnpacked && <hr />}
         <GroupList data={data} onSave={save} />
         <hr />
         <StandaloneList data={data} onSave={save} />

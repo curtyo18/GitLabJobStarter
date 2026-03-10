@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy – GitLab Job Starter</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        max-width: 680px;
+        margin: 60px auto;
+        padding: 0 24px;
+        color: #1f2937;
+        line-height: 1.7;
+      }
+      h1 { font-size: 24px; margin-bottom: 4px; }
+      h2 { font-size: 16px; margin-top: 32px; margin-bottom: 8px; }
+      p, li { font-size: 15px; color: #374151; }
+      ul { padding-left: 20px; }
+      .updated { font-size: 13px; color: #9ca3af; margin-bottom: 32px; }
+    </style>
+  </head>
+  <body>
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated: March 2026</p>
+
+    <p>
+      GitLab Job Starter is a browser extension that helps you automatically
+      start manual CI jobs on GitLab pipeline pages.
+    </p>
+
+    <h2>Data We Collect</h2>
+    <p>We collect no personal data. The extension stores only:</p>
+    <ul>
+      <li>
+        <strong>Job name patterns and groups</strong> — strings you type into
+        the extension popup to identify CI jobs. These are stored locally in
+        your browser using <code>chrome.storage.sync</code> and synced across
+        your own Chrome profile. They are never sent to any external server.
+      </li>
+      <li>
+        <strong>Test mode preference</strong> — a boolean flag stored locally
+        in <code>chrome.storage.sync</code>.
+      </li>
+    </ul>
+
+    <h2>Network Requests</h2>
+    <p>
+      The extension makes requests exclusively to GitLab instances that you
+      are already logged into and actively browsing. Specifically, it calls
+      the GitLab REST API (<code>/api/v4/</code>) to retrieve pipeline job
+      information, and the job play endpoint (<code>/-/jobs/:id/play.json</code>)
+      to start manual jobs on your behalf. These requests use your existing
+      browser session — no credentials are stored by the extension.
+    </p>
+    <p>No data is sent to the extension developer or any third party.</p>
+
+    <h2>Permissions</h2>
+    <p>
+      The extension requests access to all URLs (<code>*://*/*</code>) so that
+      it can function on any self-hosted or cloud GitLab instance, not just a
+      single hardcoded domain. It only activates on pages matching
+      <code>*/-/pipelines/*</code>.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      If you have questions about this policy, please open an issue on the
+      project's GitHub repository.
+    </p>
+  </body>
+</html>

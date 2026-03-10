@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<!--
+  Open this file in Chrome at exactly 1280x800 browser window size, then
+  screenshot the page (Win: Win+Shift+S, Mac: Cmd+Shift+4).
+  Chrome Web Store accepts 1280x800 or 640x400.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        width: 1280px;
+        height: 800px;
+        overflow: hidden;
+        background: #1a1a2e;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 48px;
+      }
+
+      /* ── fake GitLab page behind everything ── */
+      .gitlab-bg {
+        position: absolute;
+        inset: 0;
+        background: #f0f0f0;
+        display: flex;
+        flex-direction: column;
+      }
+      .gitlab-nav {
+        height: 48px;
+        background: #292961;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        gap: 12px;
+      }
+      .gitlab-nav-logo {
+        font-size: 18px;
+        color: #fff;
+        font-weight: 700;
+      }
+      .gitlab-nav-item {
+        font-size: 13px;
+        color: rgba(255,255,255,0.7);
+      }
+      .gitlab-content {
+        flex: 1;
+        padding: 24px;
+        background: #fafafa;
+      }
+      .gitlab-breadcrumb {
+        font-size: 13px;
+        color: #6b7280;
+        margin-bottom: 16px;
+      }
+      .gitlab-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 20px;
+      }
+      .pipeline-stages {
+        display: flex;
+        gap: 2px;
+        margin-bottom: 24px;
+      }
+      .stage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+      .stage-dot {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+      }
+      .stage-dot.success { background: #dcfce7; color: #16a34a; }
+      .stage-dot.running { background: #dbeafe; color: #2563eb; }
+      .stage-dot.manual  { background: #f3f4f6; color: #9ca3af; border: 2px dashed #d1d5db; }
+      .stage-name { font-size: 10px; color: #6b7280; }
+      .stage-line {
+        width: 40px;
+        height: 2px;
+        background: #e5e7eb;
+        margin-top: 15px;
+        align-self: center;
+      }
+
+      /* ── popup mockup ── */
+      .popup {
+        width: 340px;
+        background: #1f2937;
+        color: #f3f4f6;
+        border-radius: 10px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        overflow: hidden;
+        position: relative;
+        z-index: 10;
+        flex-shrink: 0;
+      }
+      .popup-header {
+        padding: 14px 16px 10px;
+        background: #111827;
+        border-bottom: 1px solid #374151;
+      }
+      .popup-h1 {
+        font-size: 14px;
+        font-weight: 600;
+        color: #e5e7eb;
+      }
+      .popup-sub {
+        font-size: 11px;
+        color: #6b7280;
+        margin-top: 2px;
+      }
+      .popup-body {
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .test-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 10px;
+        background: #111827;
+        border-radius: 6px;
+        border: 1px solid #374151;
+      }
+      .test-title { font-size: 12px; font-weight: 600; color: #e5e7eb; }
+      .test-desc  { font-size: 10px; color: #6b7280; margin-top: 1px; }
+      .toggle-track {
+        width: 34px; height: 18px;
+        background: #374151;
+        border-radius: 9px;
+        position: relative;
+        flex-shrink: 0;
+      }
+      .toggle-track::after {
+        content: "";
+        position: absolute;
+        width: 14px; height: 14px;
+        background: #fff;
+        border-radius: 50%;
+        top: 2px; left: 2px;
+      }
+      .divider { border: none; border-top: 1px solid #374151; }
+      .section-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 6px;
+      }
+      .input-row {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+      .fake-input {
+        flex: 1;
+        padding: 5px 8px;
+        background: #111827;
+        border: 1px solid #374151;
+        border-radius: 4px;
+        color: #4b5563;
+        font-size: 12px;
+      }
+      .fake-btn {
+        padding: 5px 10px;
+        background: #6366f1;
+        color: #fff;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .group-item {
+        background: #111827;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 4px;
+      }
+      .group-header-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+      .group-chevron { font-size: 10px; color: #9ca3af; }
+      .group-name-text { flex: 1; font-weight: 500; color: #e5e7eb; }
+      .group-count-text { font-size: 10px; color: #6b7280; }
+      .btn-remove-sm {
+        font-size: 11px;
+        color: #6b7280;
+        padding: 2px 6px;
+        border: 1px solid #374151;
+        border-radius: 3px;
+      }
+      .group-jobs-list {
+        padding: 6px 8px 8px 24px;
+        border-top: 1px solid #1f2937;
+      }
+      .job-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 3px 0;
+      }
+      .job-pattern {
+        font-family: monospace;
+        font-size: 11px;
+        color: #a5b4fc;
+      }
+      .standalone-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 4px 8px;
+        background: #111827;
+        border-radius: 4px;
+        margin-bottom: 3px;
+      }
+
+      /* ── widget mockup ── */
+      .widget {
+        width: 280px;
+        background: #1f2937;
+        color: #f3f4f6;
+        border-radius: 8px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        overflow: hidden;
+        position: relative;
+        z-index: 10;
+        flex-shrink: 0;
+      }
+      .widget-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 12px;
+        background: #111827;
+      }
+      .widget-title { font-size: 13px; font-weight: 600; color: #e5e7eb; }
+      .widget-chevron { font-size: 10px; color: #9ca3af; }
+      .widget-body { padding: 12px; }
+      .pipeline-label { font-size: 11px; color: #9ca3af; margin-bottom: 10px; }
+      .status-bar-w {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 8px;
+        background: #111827;
+        border-radius: 4px;
+        margin-bottom: 12px;
+        font-size: 12px;
+      }
+      .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+      .dot.active { background: #10b981; box-shadow: 0 0 6px #10b981; }
+      .dot.idle { background: #6b7280; }
+      .w-group-header {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 0;
+        font-size: 12px;
+        font-weight: 500;
+        color: #d1d5db;
+      }
+      .w-checkbox { accent-color: #6366f1; width: 13px; height: 13px; }
+      .w-job-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 0 3px 20px;
+        font-size: 11px;
+        color: #9ca3af;
+      }
+      .w-divider { border: none; border-top: 1px solid #374151; margin: 8px 0; }
+      .btn-start {
+        width: 100%;
+        padding: 7px 12px;
+        background: #6366f1;
+        color: #fff;
+        border-radius: 5px;
+        font-size: 13px;
+        font-weight: 500;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      .log-entry {
+        font-size: 11px;
+        padding: 3px 0;
+        border-bottom: 1px solid #1f2937;
+      }
+      .log-entry.started { color: #10b981; }
+      .log-entry.info    { color: #6b7280; }
+
+      /* label */
+      .scene-label {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 12px;
+        color: rgba(255,255,255,0.3);
+        white-space: nowrap;
+        z-index: 20;
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- fake GitLab page backdrop -->
+    <div class="gitlab-bg">
+      <div class="gitlab-nav">
+        <span class="gitlab-nav-logo">GitLab</span>
+        <span class="gitlab-nav-item">myorg / my-service</span>
+      </div>
+      <div class="gitlab-content">
+        <div class="gitlab-breadcrumb">myorg / my-service / Pipelines / #48291</div>
+        <div class="gitlab-title">Pipeline #48291 · main · a3f91cc</div>
+        <div class="pipeline-stages">
+          <div class="stage">
+            <div class="stage-dot success">✓</div>
+            <div class="stage-name">build</div>
+          </div>
+          <div class="stage-line"></div>
+          <div class="stage">
+            <div class="stage-dot success">✓</div>
+            <div class="stage-name">test</div>
+          </div>
+          <div class="stage-line"></div>
+          <div class="stage">
+            <div class="stage-dot running">↻</div>
+            <div class="stage-name">tf-plan</div>
+          </div>
+          <div class="stage-line"></div>
+          <div class="stage">
+            <div class="stage-dot manual">▶</div>
+            <div class="stage-name">tf-apply</div>
+          </div>
+          <div class="stage-line"></div>
+          <div class="stage">
+            <div class="stage-dot manual">▶</div>
+            <div class="stage-name">deploy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- popup -->
+    <div class="popup">
+      <div class="popup-header">
+        <div class="popup-h1">GitLab Job Starter</div>
+        <div class="popup-sub">Configure job patterns to auto-start on pipeline pages.</div>
+      </div>
+      <div class="popup-body">
+        <div class="test-bar">
+          <div>
+            <div class="test-title">Test Mode</div>
+            <div class="test-desc">Simulate jobs without hitting the real API</div>
+          </div>
+          <div class="toggle-track"></div>
+        </div>
+
+        <hr class="divider" />
+
+        <div>
+          <div class="section-label">Groups</div>
+          <div class="input-row">
+            <div class="fake-input">Group name (e.g. dev1)</div>
+            <div class="fake-btn">New Group</div>
+          </div>
+          <div class="group-item">
+            <div class="group-header-row">
+              <span class="group-chevron">▼</span>
+              <span class="group-name-text">dev1</span>
+              <span class="group-count-text">2 jobs</span>
+              <span class="btn-remove-sm">Remove</span>
+            </div>
+            <div class="group-jobs-list">
+              <div class="job-row">
+                <span class="job-pattern">tf-apply-dev1</span>
+                <span class="btn-remove-sm">Remove</span>
+              </div>
+              <div class="job-row">
+                <span class="job-pattern">ecs-deploy-dev1</span>
+                <span class="btn-remove-sm">Remove</span>
+              </div>
+            </div>
+          </div>
+          <div class="group-item">
+            <div class="group-header-row">
+              <span class="group-chevron">▶</span>
+              <span class="group-name-text">prod</span>
+              <span class="group-count-text">2 jobs</span>
+              <span class="btn-remove-sm">Remove</span>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <div>
+          <div class="section-label">Standalone Jobs</div>
+          <div class="input-row">
+            <div class="fake-input">Job name pattern</div>
+            <div class="fake-btn">Add</div>
+          </div>
+          <div class="standalone-row">
+            <span class="job-pattern">smoke-test</span>
+            <span class="btn-remove-sm">Remove</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- widget -->
+    <div class="widget">
+      <div class="widget-header">
+        <span class="widget-title">GitLab Job Starter</span>
+        <span class="widget-chevron">▲</span>
+      </div>
+      <div class="widget-body">
+        <div class="pipeline-label">Pipeline #48291</div>
+        <div class="status-bar-w">
+          <span class="dot active"></span>
+          <span>Monitoring</span>
+        </div>
+
+        <div class="w-group-header">
+          <input type="checkbox" class="w-checkbox" checked readonly /> dev1
+        </div>
+        <div class="w-job-row">
+          <input type="checkbox" class="w-checkbox" checked readonly /> tf-apply-dev1
+        </div>
+        <div class="w-job-row">
+          <input type="checkbox" class="w-checkbox" checked readonly /> ecs-deploy-dev1
+        </div>
+        <div class="w-group-header">
+          <input type="checkbox" class="w-checkbox" readonly /> prod
+        </div>
+        <div class="w-job-row">
+          <input type="checkbox" class="w-checkbox" readonly /> tf-apply-prod
+        </div>
+        <div class="w-job-row">
+          <input type="checkbox" class="w-checkbox" readonly /> ecs-deploy-prod
+        </div>
+
+        <hr class="w-divider" />
+
+        <div class="btn-start">Stop Monitoring</div>
+
+        <div class="log-entry started">✓ Started: tf-apply-dev1</div>
+        <div class="log-entry started">✓ Started: ecs-deploy-dev1</div>
+        <div class="log-entry info">Monitoring started (2 patterns)</div>
+      </div>
+    </div>
+
+    <div class="scene-label">GitLab Job Starter — Chrome Extension</div>
+
+  </body>
+</html>
