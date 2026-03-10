@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "GitLab Job Starter",
+  "version": "1.0.0",
+  "description": "Auto-start manual CI jobs on any GitLab pipeline page.",
+  "background": {
+    "service_worker": "src/background/index.ts",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "src/popup/index.html",
+    "default_title": "GitLab Job Starter"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*/-/pipelines/*"],
+      "js": ["src/content/index.ts"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": ["storage"],
+  "host_permissions": ["*://*/*"]
+}

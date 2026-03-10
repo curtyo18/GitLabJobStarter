@@ -1,0 +1,215 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:host {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99999;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+}
+
+.panel {
+  background: #1f2937;
+  color: #f3f4f6;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  width: 280px;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: #111827;
+  cursor: pointer;
+  user-select: none;
+}
+
+.header-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: #e5e7eb;
+}
+
+.header-chevron {
+  font-size: 10px;
+  color: #9ca3af;
+  transition: transform 0.2s;
+}
+
+.test-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: #d97706;
+  color: #fff;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: auto;
+  margin-right: 6px;
+}
+
+.header-chevron.collapsed {
+  transform: rotate(180deg);
+}
+
+.body {
+  padding: 12px;
+}
+
+.body.hidden {
+  display: none;
+}
+
+.pipeline-id {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-bottom: 10px;
+}
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 6px 8px;
+  background: #111827;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6b7280;
+  flex-shrink: 0;
+}
+
+.status-dot.active {
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.watchlist {
+  margin-bottom: 12px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.watchlist:empty::after {
+  content: "No jobs configured. Use the popup to add jobs.";
+  font-size: 11px;
+  color: #6b7280;
+  display: block;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+}
+
+.group-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: #d1d5db;
+  font-weight: 500;
+}
+
+.group-jobs {
+  padding-left: 20px;
+}
+
+.job-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+  cursor: pointer;
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+.job-label:hover,
+.group-label:hover {
+  color: #f3f4f6;
+}
+
+input[type="checkbox"] {
+  accent-color: #6366f1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.section-divider {
+  border: none;
+  border-top: 1px solid #374151;
+  margin: 8px 0;
+}
+
+.btn-monitor {
+  width: 100%;
+  padding: 7px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  background: #6366f1;
+  color: #fff;
+}
+
+.btn-monitor:hover {
+  background: #4f46e5;
+}
+
+.btn-monitor.active {
+  background: #dc2626;
+}
+
+.btn-monitor.active:hover {
+  background: #b91c1c;
+}
+
+.btn-monitor:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.log {
+  margin-top: 10px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.log-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 3px 0;
+  font-size: 11px;
+  color: #6b7280;
+  border-bottom: 1px solid #1f2937;
+}
+
+.log-entry.started {
+  color: #10b981;
+}
+
+.log-entry.error {
+  color: #f87171;
+}
