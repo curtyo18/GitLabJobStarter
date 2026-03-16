@@ -52,7 +52,7 @@ async function poll(info: PipelineInfo, selectedPatterns: string[]) {
             widget?.addLog("Could not read CSRF token — is this a GitLab page?", "error");
             return;
           }
-          name = await playJob(info.origin, job.id, csrf);
+          name = await playJob(info.origin, info.repoPath, job.id, csrf);
         }
         startedJobIds.add(job.id);
         widget?.addLog(`${testMode ? "[TEST] " : ""}Started: ${name}`, "started");

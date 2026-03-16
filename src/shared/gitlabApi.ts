@@ -68,10 +68,11 @@ export async function getAllManualJobs(
 
 export async function playJob(
   origin: string,
+  repoPath: string,
   jobId: number,
   csrfToken: string
 ): Promise<string> {
-  const url = `${origin}/-/jobs/${jobId}/play.json`;
+  const url = `${origin}/${repoPath}/-/jobs/${jobId}/play.json`;
   const response = await fetch(url, {
     method: "POST",
     credentials: "include",
