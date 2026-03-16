@@ -184,7 +184,8 @@ export function createWidget(
       if (!log) return;
       const entry = document.createElement("div");
       entry.className = `log-entry ${type}`;
-      entry.textContent = message;
+      const time = new Date().toLocaleTimeString("en-US", { hour12: false });
+      entry.textContent = `${time} ${message}`;
       log.prepend(entry);
       // Keep last 10 entries
       while (log.children.length > 10) log.lastChild?.remove();

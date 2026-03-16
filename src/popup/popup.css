@@ -282,3 +282,51 @@ li {
 .toggle input:checked + .toggle-track::after {
   transform: translateX(16px);
 }
+
+/* Import / Export */
+.config-textarea {
+  width: 100%;
+  height: 52px;
+  resize: none;
+  background: #111827;
+  border: 1px solid #374151;
+  border-radius: 4px;
+  color: #6b7280;
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 10px;
+  padding: 5px 8px;
+  outline: none;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+.config-textarea:focus {
+  border-color: #6366f1;
+  color: #9ca3af;
+}
+
+.import-export-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-subtle {
+  padding: 4px 10px;
+  background: transparent;
+  color: #9ca3af;
+  border: 1px solid #374151;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.btn-subtle:hover {
+  background: #1f2937;
+  color: #f3f4f6;
+  border-color: #6b7280;
+}
+
+.btn-subtle.btn-error {
+  color: #f87171;
+  border-color: #f87171;
+}

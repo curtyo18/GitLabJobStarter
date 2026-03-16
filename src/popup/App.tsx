@@ -2,6 +2,7 @@ import { useState, useEffect } from "preact/hooks";
 import { useStorage } from "./hooks/useStorage";
 import { GroupList } from "./components/GroupList";
 import { StandaloneList } from "./components/StandaloneList";
+import { ImportExport } from "./components/ImportExport";
 import { getTestMode, setTestMode } from "../shared/storage";
 
 // update_url is only present in store-installed extensions, never in unpacked
@@ -56,6 +57,8 @@ export function App() {
         <GroupList data={data} onSave={save} />
         <hr />
         <StandaloneList data={data} onSave={save} />
+        <hr />
+        <ImportExport data={data} onImport={save} />
       </main>
     </div>
   );
