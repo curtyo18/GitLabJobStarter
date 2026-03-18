@@ -30,12 +30,3 @@ export async function getWatchlist(): Promise<SyncStorageData> {
 export async function setWatchlist(data: SyncStorageData): Promise<void> {
   await chrome.storage.sync.set({ [STORAGE_KEY]: data });
 }
-
-export async function getTestMode(): Promise<boolean> {
-  const result = await chrome.storage.sync.get("testMode");
-  return result.testMode ?? false;
-}
-
-export async function setTestMode(enabled: boolean): Promise<void> {
-  await chrome.storage.sync.set({ testMode: enabled });
-}

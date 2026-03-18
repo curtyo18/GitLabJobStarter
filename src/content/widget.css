@@ -44,18 +44,6 @@
   transition: transform 0.2s;
 }
 
-.test-badge {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  background: #d97706;
-  color: #fff;
-  padding: 1px 5px;
-  border-radius: 3px;
-  margin-left: auto;
-  margin-right: 6px;
-}
-
 .header-chevron.collapsed {
   transform: rotate(180deg);
 }

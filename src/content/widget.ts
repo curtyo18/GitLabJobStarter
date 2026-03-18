@@ -4,7 +4,6 @@ import { SyncStorageData, JobPattern } from "../types/storage";
 export interface WidgetController {
   updateWatchlist(watchlist: SyncStorageData): void;
   setMonitoring(active: boolean): void;
-  setTestMode(enabled: boolean): void;
   addLog(message: string, type: "started" | "error" | "info"): void;
   getSelectedPatterns(): JobPattern[];
 }
@@ -32,7 +31,6 @@ export function createWidget(
 
   let collapsed = false;
   let monitoring = false;
-  let testMode = false;
   let currentWatchlist = watchlist;
 
   function render() {
@@ -44,7 +42,6 @@ export function createWidget(
     panel.innerHTML = `
       <div class="header">
         <span class="header-title">GitLab Job Starter</span>
-        ${testMode ? '<span class="test-badge">TEST</span>' : ""}
         <span class="header-chevron ${collapsed ? "collapsed" : ""}">▲</span>
       </div>
       <div class="body ${collapsed ? "hidden" : ""}">
@@ -188,10 +185,6 @@ export function createWidget(
     },
     setMonitoring(active: boolean) {
       monitoring = active;
-      render();
-    },
-    setTestMode(enabled: boolean) {
-      testMode = enabled;
       render();
     },
     addLog(message: string, type: "started" | "error" | "info") {

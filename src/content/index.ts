@@ -1,6 +1,5 @@
-import { getWatchlist, getTestMode } from "../shared/storage";
+import { getWatchlist } from "../shared/storage";
 import { getAllManualJobs, playJob } from "../shared/gitlabApi";
-import { getMockManualJobs, mockPlayJob } from "../shared/mockApi";
 import { matchJobs } from "../shared/patterns";
 import { SCAN_INTERVAL_MS } from "../shared/constants";
 import { readCsrfToken } from "./csrfToken";
@@ -33,10 +32,7 @@ let currentPipelineInfo: PipelineInfo | null = null;
 
 async function poll(info: PipelineInfo, selectedPatterns: JobPattern[]) {
   try {
-    const testMode = await getTestMode();
-    const manualJobs = testMode
-      ? await getMockManualJobs()
-      : await getAllManualJobs(info.origin, info.repoPath, info.pipelineId);
+    const manualJobs = await getAllManualJobs(info.origin, info.repoPath, info.pipelineId);
 
     const toStart = matchJobs(manualJobs, selectedPatterns).filter(
       (job) => !startedJobIds.has(job.id)
@@ -44,19 +40,14 @@ async function poll(info: PipelineInfo, selectedPatterns: JobPattern[]) {
 
     for (const job of toStart) {
       try {
-        let name: string;
-        if (testMode) {
-          name = await mockPlayJob(job.name);
-        } else {
-          const csrf = readCsrfToken();
-          if (!csrf) {
-            widget?.addLog("Could not read CSRF token — is this a GitLab page?", "error");
-            return;
-          }
-          name = await playJob(info.origin, info.repoPath, job.id, csrf);
+        const csrf = readCsrfToken();
+        if (!csrf) {
+          widget?.addLog("Could not read CSRF token — is this a GitLab page?", "error");
+          return;
         }
+        const name = await playJob(info.origin, info.repoPath, job.id, csrf);
         startedJobIds.add(job.id);
-        widget?.addLog(`${testMode ? "[TEST] " : ""}Started: ${name}`, "started");
+        widget?.addLog(`Started: ${name}`, "started");
         console.log(`[GJS] Started job: ${name} (${job.id})`);
       } catch (err) {
         widget?.addLog(`Failed to start ${job.name}`, "error");
@@ -107,19 +98,13 @@ async function init() {
     }
   });
 
-  // Keep watchlist and test mode in sync if user edits them in the popup
+  // Keep watchlist in sync if user edits it in the popup
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== "sync") return;
     if (changes["watchlist"]) {
       widget?.updateWatchlist(changes["watchlist"].newValue);
     }
-    if (changes["testMode"]) {
-      widget?.setTestMode(changes["testMode"].newValue ?? false);
-    }
   });
-
-  // Reflect initial test mode state in widget
-  getTestMode().then((enabled) => widget?.setTestMode(enabled));
 
   // SPA navigation detection — GitLab is a Vue SPA
   let lastPathname = location.pathname;

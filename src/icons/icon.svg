@@ -1,6 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <!-- Background -->
-  <rect width="128" height="128" rx="26" fill="#6366f1"/>
-  <!-- Play triangle -->
-  <polygon points="44,26 44,102 100,64" fill="white"/>
+  <!-- Rocket body -->
+  <path d="M64 8 C64 8 38 36 38 74 L52 74 L52 92 L64 106 L76 92 L76 74 L90 74 C90 36 64 8 64 8 Z" fill="#FC6D26"/>
+  <!-- Rocket window -->
+  <circle cx="64" cy="54" r="10" fill="white" opacity="0.25"/>
+  <circle cx="64" cy="54" r="7" fill="#FCA326"/>
+  <!-- Left fin -->
+  <path d="M38 74 L22 96 L52 88 Z" fill="#E24329"/>
+  <!-- Right fin -->
+  <path d="M90 74 L106 96 L76 88 Z" fill="#E24329"/>
+  <!-- Exhaust -->
+  <ellipse cx="64" cy="108" rx="10" ry="6" fill="#FCA326" opacity="0.6"/>
+  <ellipse cx="64" cy="116" rx="6" ry="4" fill="#FC6D26" opacity="0.35"/>
 </svg>
