@@ -1,21 +1,16 @@
 import { GitLabJob } from "../types/gitlab";
+import { JobPattern } from "../types/storage";
 
-function patternToRegex(pattern: string): RegExp {
-  // Escape all regex special chars except *, then replace * with .*
-  const escaped = pattern.replace(/[.+^${}()|[\]\\]/g, "\\$&");
-  return new RegExp("^" + escaped.replace(/\*/g, ".*") + "$");
-}
-
-function matchesPattern(jobName: string, pattern: string): boolean {
-  if (pattern.includes("*")) {
-    return patternToRegex(pattern).test(jobName);
+function matchesPattern(jobName: string, { pattern, matchType }: JobPattern): boolean {
+  switch (matchType) {
+    case "contains": return jobName.includes(pattern);
+    case "starts":   return jobName.startsWith(pattern);
+    case "ends":     return jobName.endsWith(pattern);
+    case "exact":    return jobName === pattern;
   }
-  return jobName.includes(pattern);
 }
 
-export function matchJobs(jobs: GitLabJob[], patterns: string[]): GitLabJob[] {
+export function matchJobs(jobs: GitLabJob[], patterns: JobPattern[]): GitLabJob[] {
   if (patterns.length === 0) return [];
-  return jobs.filter((job) =>
-    patterns.some((pattern) => matchesPattern(job.name, pattern))
-  );
+  return jobs.filter((job) => patterns.some((p) => matchesPattern(job.name, p)));
 }

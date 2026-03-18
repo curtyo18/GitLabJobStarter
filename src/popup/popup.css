@@ -87,6 +87,33 @@ h2 {
   color: #4b5563;
 }
 
+.input-row select {
+  padding: 5px 6px;
+  background: #111827;
+  border: 1px solid #374151;
+  border-radius: 4px;
+  color: #9ca3af;
+  font-size: 11px;
+  outline: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.input-row select:focus {
+  border-color: #6366f1;
+}
+
+.match-type-badge {
+  font-size: 10px;
+  color: #6b7280;
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 3px;
+  padding: 1px 5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 button {
   padding: 5px 10px;
   background: #6366f1;

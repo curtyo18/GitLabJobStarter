@@ -1,18 +1,18 @@
 import widgetCss from "./widget.css?inline";
-import { SyncStorageData } from "../types/storage";
+import { SyncStorageData, JobPattern } from "../types/storage";
 
 export interface WidgetController {
   updateWatchlist(watchlist: SyncStorageData): void;
   setMonitoring(active: boolean): void;
   setTestMode(enabled: boolean): void;
   addLog(message: string, type: "started" | "error" | "info"): void;
-  getSelectedPatterns(): string[];
+  getSelectedPatterns(): JobPattern[];
 }
 
 export function createWidget(
   pipelineId: string,
   watchlist: SyncStorageData,
-  onToggle: (selectedPatterns: string[], start: boolean) => void
+  onToggle: (selectedPatterns: JobPattern[], start: boolean) => void
 ): WidgetController {
   // Shadow DOM host — fully isolated from GitLab's styles
   const host = document.createElement("div");
@@ -36,7 +36,7 @@ export function createWidget(
   let currentWatchlist = watchlist;
 
   function render() {
-    const selectedPatterns = getSelectedPatterns();
+    const selectedKeys = getSelectedKeys();
     const hasItems =
       currentWatchlist.standaloneJobs.length > 0 ||
       currentWatchlist.groups.length > 0;
@@ -62,7 +62,7 @@ export function createWidget(
           id="gjs-toggle-btn"
           ${!hasItems ? "disabled" : ""}
         >
-          ${monitoring ? "Stop Monitoring" : selectedPatterns.length > 0 ? `Start Monitoring (${selectedPatterns.length})` : "Start Monitoring"}
+          ${monitoring ? "Stop Monitoring" : selectedKeys.length > 0 ? `Start Monitoring (${selectedKeys.length})` : "Start Monitoring"}
         </button>
         <div class="log" id="gjs-log"></div>
       </div>
@@ -82,7 +82,7 @@ export function createWidget(
     shadow
       .querySelectorAll<HTMLInputElement>("input[data-pattern]")
       .forEach((cb) => {
-        cb.checked = selectedPatterns.includes(cb.dataset.pattern!);
+        cb.checked = selectedKeys.includes(cb.dataset.pattern!);
       });
 
     // Group toggle: check/uncheck all jobs in group
@@ -106,6 +106,17 @@ export function createWidget(
       });
   }
 
+  const MATCH_LABEL: Record<string, string> = {
+    contains: "~",
+    starts: "^",
+    ends: "$",
+    exact: "=",
+  };
+
+  function serializePattern(job: JobPattern): string {
+    return JSON.stringify(job);
+  }
+
   function renderWatchlist(): string {
     const groups = currentWatchlist.groups
       .map(
@@ -121,8 +132,8 @@ export function createWidget(
             .map(
               (job) => `
             <label class="job-label">
-              <input type="checkbox" data-pattern="${escHtml(job)}" data-in-group="${g.id}" />
-              ${escHtml(job)}
+              <input type="checkbox" data-pattern="${escHtml(serializePattern(job))}" data-in-group="${g.id}" />
+              <span class="match-badge">${escHtml(MATCH_LABEL[job.matchType] ?? "~")}</span>${escHtml(job.pattern)}
             </label>
           `
             )
@@ -136,8 +147,8 @@ export function createWidget(
       .map(
         (job) => `
         <label class="job-label">
-          <input type="checkbox" data-pattern="${escHtml(job)}" />
-          ${escHtml(job)}
+          <input type="checkbox" data-pattern="${escHtml(serializePattern(job))}" />
+          <span class="match-badge">${escHtml(MATCH_LABEL[job.matchType] ?? "~")}</span>${escHtml(job.pattern)}
         </label>
       `
       )
@@ -146,14 +157,18 @@ export function createWidget(
     return groups + (groups && standalone ? '<hr class="section-divider">' : "") + standalone;
   }
 
-  function getSelectedPatterns(): string[] {
-    const patterns: string[] = [];
+  function getSelectedKeys(): string[] {
+    const keys: string[] = [];
     shadow
       .querySelectorAll<HTMLInputElement>("input[data-pattern]:checked")
       .forEach((cb) => {
-        if (cb.dataset.pattern) patterns.push(cb.dataset.pattern);
+        if (cb.dataset.pattern) keys.push(cb.dataset.pattern);
       });
-    return patterns;
+    return keys;
+  }
+
+  function getSelectedPatterns(): JobPattern[] {
+    return getSelectedKeys().map((k) => JSON.parse(k) as JobPattern);
   }
 
   function escHtml(str: string): string {

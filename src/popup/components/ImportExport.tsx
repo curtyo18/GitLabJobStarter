@@ -6,18 +6,27 @@ interface Props {
   onImport: (next: SyncStorageData) => void;
 }
 
+function isJob(j: unknown): boolean {
+  // Accept legacy plain strings and new JobPattern objects
+  if (typeof j === "string") return true;
+  if (typeof j !== "object" || j === null) return false;
+  const o = j as Record<string, unknown>;
+  return typeof o.pattern === "string" && typeof o.matchType === "string";
+}
+
 function isValidData(value: unknown): value is SyncStorageData {
   if (typeof value !== "object" || value === null) return false;
   const obj = value as Record<string, unknown>;
   return (
     Array.isArray(obj.standaloneJobs) &&
-    obj.standaloneJobs.every((j) => typeof j === "string") &&
+    obj.standaloneJobs.every(isJob) &&
     Array.isArray(obj.groups) &&
     obj.groups.every(
       (g) =>
         typeof (g as Record<string, unknown>).id === "string" &&
         typeof (g as Record<string, unknown>).name === "string" &&
-        Array.isArray((g as Record<string, unknown>).jobs)
+        Array.isArray((g as Record<string, unknown>).jobs) &&
+        (g as Record<string, unknown[]>).jobs.every(isJob)
     )
   );
 }

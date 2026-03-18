@@ -1,11 +1,18 @@
 import { useState } from "preact/hooks";
-import { SyncStorageData, WatchGroup } from "../../types/storage";
+import { SyncStorageData, WatchGroup, JobPattern } from "../../types/storage";
 import { PatternInput } from "./PatternInput";
 
 interface Props {
   data: SyncStorageData;
   onSave: (next: SyncStorageData) => void;
 }
+
+const LABELS: Record<string, string> = {
+  contains: "contains",
+  starts: "starts with",
+  ends: "ends with",
+  exact: "exact",
+};
 
 export function GroupList({ data, onSave }: Props) {
   const [newGroupName, setNewGroupName] = useState("");
@@ -28,22 +35,30 @@ export function GroupList({ data, onSave }: Props) {
     onSave({ ...data, groups: data.groups.filter((g) => g.id !== id) });
   }
 
-  function addJobToGroup(groupId: string, jobName: string) {
+  function addJobToGroup(groupId: string, job: JobPattern) {
     onSave({
       ...data,
       groups: data.groups.map((g) =>
-        g.id === groupId && !g.jobs.includes(jobName)
-          ? { ...g, jobs: [...g.jobs, jobName] }
+        g.id === groupId &&
+        !g.jobs.some((j) => j.pattern === job.pattern && j.matchType === job.matchType)
+          ? { ...g, jobs: [...g.jobs, job] }
           : g
       ),
     });
   }
 
-  function removeJobFromGroup(groupId: string, jobName: string) {
+  function removeJobFromGroup(groupId: string, job: JobPattern) {
     onSave({
       ...data,
       groups: data.groups.map((g) =>
-        g.id === groupId ? { ...g, jobs: g.jobs.filter((j) => j !== jobName) } : g
+        g.id === groupId
+          ? {
+              ...g,
+              jobs: g.jobs.filter(
+                (j) => !(j.pattern === job.pattern && j.matchType === job.matchType)
+              ),
+            }
+          : g
       ),
     });
   }
@@ -100,15 +115,16 @@ export function GroupList({ data, onSave }: Props) {
                   <div class="group-body">
                     <PatternInput
                       placeholder="Add job pattern to group"
-                      onAdd={(name) => addJobToGroup(group.id, name)}
+                      onAdd={(job) => addJobToGroup(group.id, job)}
                     />
                     {group.jobs.length === 0 ? (
                       <p class="empty">No jobs in this group yet.</p>
                     ) : (
                       <ul>
                         {group.jobs.map((job) => (
-                          <li key={job}>
-                            <span class="pattern">{job}</span>
+                          <li key={`${job.matchType}:${job.pattern}`}>
+                            <span class="match-type-badge">{LABELS[job.matchType]}</span>
+                            <span class="pattern">{job.pattern}</span>
                             <button
                               class="btn-remove"
                               onClick={() => removeJobFromGroup(group.id, job)}

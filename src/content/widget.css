@@ -143,6 +143,18 @@
   font-size: 12px;
 }
 
+.match-badge {
+  font-size: 10px;
+  font-family: monospace;
+  color: #6b7280;
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 3px;
+  padding: 0 4px;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
 .job-label:hover,
 .group-label:hover {
   color: #f3f4f6;

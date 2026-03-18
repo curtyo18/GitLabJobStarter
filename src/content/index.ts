@@ -5,6 +5,7 @@ import { matchJobs } from "../shared/patterns";
 import { SCAN_INTERVAL_MS } from "../shared/constants";
 import { readCsrfToken } from "./csrfToken";
 import { createWidget, WidgetController } from "./widget";
+import { JobPattern } from "../types/storage";
 
 interface PipelineInfo {
   origin: string;
@@ -30,7 +31,7 @@ let pollIntervalId: ReturnType<typeof setInterval> | null = null;
 let widget: WidgetController | null = null;
 let currentPipelineInfo: PipelineInfo | null = null;
 
-async function poll(info: PipelineInfo, selectedPatterns: string[]) {
+async function poll(info: PipelineInfo, selectedPatterns: JobPattern[]) {
   try {
     const testMode = await getTestMode();
     const manualJobs = testMode
@@ -67,7 +68,7 @@ async function poll(info: PipelineInfo, selectedPatterns: string[]) {
   }
 }
 
-function startMonitoring(info: PipelineInfo, selectedPatterns: string[]) {
+function startMonitoring(info: PipelineInfo, selectedPatterns: JobPattern[]) {
   stopMonitoring();
   if (selectedPatterns.length === 0) {
     widget?.addLog("Select at least one job pattern first.", "error");
