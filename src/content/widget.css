@@ -14,10 +14,10 @@
 }
 
 .panel {
-  background: #1f2937;
-  color: #f3f4f6;
-  border-radius: 8px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  background: #0f0f17;
+  color: #dde1e7;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 0 1px #1e1e2e;
   width: 280px;
   overflow: hidden;
 }
@@ -27,20 +27,22 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  background: #111827;
+  background: #0f0f17;
+  border-bottom: 1px solid #1e1e2e;
   cursor: pointer;
   user-select: none;
 }
 
 .header-title {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 13px;
-  color: #e5e7eb;
+  color: #ffffff;
+  letter-spacing: -0.01em;
 }
 
 .header-chevron {
   font-size: 10px;
-  color: #9ca3af;
+  color: #565869;
   transition: transform 0.2s;
 }
 
@@ -58,7 +60,7 @@
 
 .pipeline-id {
   font-size: 11px;
-  color: #9ca3af;
+  color: #565869;
   margin-bottom: 10px;
 }
 
@@ -68,22 +70,22 @@
   gap: 6px;
   margin-bottom: 12px;
   padding: 6px 8px;
-  background: #111827;
-  border-radius: 4px;
+  background: #1a1a28;
+  border-radius: 6px;
   font-size: 12px;
 }
 
 .status-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: #6b7280;
+  background: #3a3a52;
   flex-shrink: 0;
 }
 
 .status-dot.active {
-  background: #10b981;
-  box-shadow: 0 0 6px #10b981;
+  background: #98c379;
+  box-shadow: 0 0 6px #98c379;
 }
 
 .watchlist {
@@ -95,7 +97,7 @@
 .watchlist:empty::after {
   content: "No jobs configured. Use the popup to add jobs.";
   font-size: 11px;
-  color: #6b7280;
+  color: #3a3a52;
   display: block;
   text-align: center;
   padding: 8px 0;
@@ -113,8 +115,9 @@
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  color: #d1d5db;
-  font-weight: 500;
+  color: #dde1e7;
+  font-weight: 600;
+  font-size: 12px;
 }
 
 .group-jobs {
@@ -127,16 +130,16 @@
   gap: 6px;
   padding: 3px 0;
   cursor: pointer;
-  color: #9ca3af;
+  color: #8b8fa8;
   font-size: 12px;
 }
 
 .match-badge {
   font-size: 10px;
   font-family: monospace;
-  color: #6b7280;
-  background: #1f2937;
-  border: 1px solid #374151;
+  color: #565869;
+  background: #1a1a28;
+  border: 1px solid #2a2a3e;
   border-radius: 3px;
   padding: 0 4px;
   flex-shrink: 0;
@@ -145,18 +148,18 @@
 
 .job-label:hover,
 .group-label:hover {
-  color: #f3f4f6;
+  color: #dde1e7;
 }
 
 input[type="checkbox"] {
-  accent-color: #6366f1;
+  accent-color: #FC6D26;
   cursor: pointer;
   flex-shrink: 0;
 }
 
 .section-divider {
   border: none;
-  border-top: 1px solid #374151;
+  border-top: 1px solid #1e1e2e;
   margin: 8px 0;
 }
 
@@ -164,29 +167,30 @@ input[type="checkbox"] {
   width: 100%;
   padding: 7px 12px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
-  background: #6366f1;
+  background: #FC6D26;
   color: #fff;
 }
 
 .btn-monitor:hover {
-  background: #4f46e5;
+  background: #e05a1a;
 }
 
 .btn-monitor.active {
-  background: #dc2626;
+  background: #3a3a52;
+  color: #e06c75;
 }
 
 .btn-monitor.active:hover {
-  background: #b91c1c;
+  background: #2a2a3e;
 }
 
 .btn-monitor:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
@@ -202,14 +206,14 @@ input[type="checkbox"] {
   gap: 5px;
   padding: 3px 0;
   font-size: 11px;
-  color: #6b7280;
-  border-bottom: 1px solid #1f2937;
+  color: #565869;
+  border-bottom: 1px solid #1a1a28;
 }
 
 .log-entry.started {
-  color: #10b981;
+  color: #98c379;
 }
 
 .log-entry.error {
-  color: #f87171;
+  color: #e06c75;
 }

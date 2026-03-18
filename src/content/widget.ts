@@ -59,7 +59,7 @@ export function createWidget(
           id="gjs-toggle-btn"
           ${!hasItems ? "disabled" : ""}
         >
-          ${monitoring ? "Stop Monitoring" : selectedKeys.length > 0 ? `Start Monitoring (${selectedKeys.length})` : "Start Monitoring"}
+          ${monitoring ? "Stop Monitoring" : "Start Monitoring"}
         </button>
         <div class="log" id="gjs-log"></div>
       </div>
