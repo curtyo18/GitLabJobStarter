@@ -47,9 +47,7 @@ async function getDownstreamJobs(
   const bridges = await fetchPaginated<GitLabBridge>(url);
   const started = bridges.filter((b) => b.downstream_pipeline?.id);
   const results = await Promise.all(
-    started.map((b) =>
-      getPipelineJobs(origin, repoPath, String(b.downstream_pipeline!.id))
-    )
+    started.map((b) => getPipelineJobs(origin, repoPath, String(b.downstream_pipeline!.id)))
   );
   return results.flat();
 }
