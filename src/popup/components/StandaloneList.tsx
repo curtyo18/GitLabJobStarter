@@ -8,7 +8,8 @@ interface Props {
 
 export function StandaloneList({ data, onSave }: Props) {
   function addJob(job: JobPattern) {
-    if (data.standaloneJobs.some((j) => j.pattern === job.pattern && j.matchType === job.matchType)) return;
+    if (data.standaloneJobs.some((j) => j.pattern === job.pattern && j.matchType === job.matchType))
+      return;
     onSave({ ...data, standaloneJobs: [...data.standaloneJobs, job] });
   }
 

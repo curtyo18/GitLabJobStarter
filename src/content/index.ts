@@ -48,7 +48,6 @@ async function poll(info: PipelineInfo, selectedPatterns: JobPattern[]) {
         const name = await playJob(info.origin, info.repoPath, job.id, csrf);
         startedJobIds.add(job.id);
         widget?.addLog(`Started: ${name}`, "started");
-        console.log(`[GJS] Started job: ${name} (${job.id})`);
       } catch (err) {
         widget?.addLog(`Failed to start ${job.name}`, "error");
         console.error(`[GJS] Failed to start job ${job.id}:`, err);
@@ -70,7 +69,10 @@ function startMonitoring(info: PipelineInfo, selectedPatterns: JobPattern[]) {
   // Run immediately on start
   poll(info, selectedPatterns);
   widget?.setMonitoring(true);
-  widget?.addLog(`Monitoring started (${selectedPatterns.length} pattern${selectedPatterns.length !== 1 ? "s" : ""})`, "info");
+  widget?.addLog(
+    `Monitoring started (${selectedPatterns.length} pattern${selectedPatterns.length !== 1 ? "s" : ""})`,
+    "info"
+  );
 }
 
 function stopMonitoring() {

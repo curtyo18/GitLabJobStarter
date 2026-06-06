@@ -36,8 +36,7 @@ export function createWidget(
   function render() {
     const selectedKeys = getSelectedKeys();
     const hasItems =
-      currentWatchlist.standaloneJobs.length > 0 ||
-      currentWatchlist.groups.length > 0;
+      currentWatchlist.standaloneJobs.length > 0 || currentWatchlist.groups.length > 0;
 
     panel.innerHTML = `
       <div class="header">
@@ -76,31 +75,26 @@ export function createWidget(
     });
 
     // Restore checkbox states
-    shadow
-      .querySelectorAll<HTMLInputElement>("input[data-pattern]")
-      .forEach((cb) => {
-        cb.checked = selectedKeys.includes(cb.dataset.pattern!);
-      });
+    shadow.querySelectorAll<HTMLInputElement>("input[data-pattern]").forEach((cb) => {
+      cb.checked = selectedKeys.includes(cb.dataset.pattern!);
+    });
 
     // Group toggle: check/uncheck all jobs in group
-    shadow
-      .querySelectorAll<HTMLInputElement>("input[data-group-id]")
-      .forEach((groupCb) => {
-        const groupId = groupCb.dataset.groupId!;
-        const jobCbs = shadow.querySelectorAll<HTMLInputElement>(
-          `input[data-pattern][data-in-group="${groupId}"]`
-        );
-        const allChecked = Array.from(jobCbs).every((cb) => cb.checked);
-        groupCb.checked = allChecked;
-        groupCb.indeterminate =
-          !allChecked && Array.from(jobCbs).some((cb) => cb.checked);
+    shadow.querySelectorAll<HTMLInputElement>("input[data-group-id]").forEach((groupCb) => {
+      const groupId = groupCb.dataset.groupId!;
+      const jobCbs = shadow.querySelectorAll<HTMLInputElement>(
+        `input[data-pattern][data-in-group="${groupId}"]`
+      );
+      const allChecked = Array.from(jobCbs).every((cb) => cb.checked);
+      groupCb.checked = allChecked;
+      groupCb.indeterminate = !allChecked && Array.from(jobCbs).some((cb) => cb.checked);
 
-        groupCb.addEventListener("change", () => {
-          jobCbs.forEach((cb) => {
-            cb.checked = groupCb.checked;
-          });
+      groupCb.addEventListener("change", () => {
+        jobCbs.forEach((cb) => {
+          cb.checked = groupCb.checked;
         });
       });
+    });
   }
 
   const MATCH_LABEL: Record<string, string> = {
@@ -156,11 +150,9 @@ export function createWidget(
 
   function getSelectedKeys(): string[] {
     const keys: string[] = [];
-    shadow
-      .querySelectorAll<HTMLInputElement>("input[data-pattern]:checked")
-      .forEach((cb) => {
-        if (cb.dataset.pattern) keys.push(cb.dataset.pattern);
-      });
+    shadow.querySelectorAll<HTMLInputElement>("input[data-pattern]:checked").forEach((cb) => {
+      if (cb.dataset.pattern) keys.push(cb.dataset.pattern);
+    });
     return keys;
   }
 

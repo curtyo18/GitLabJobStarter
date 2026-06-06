@@ -11,10 +11,7 @@ export function useStorage() {
   useEffect(() => {
     getWatchlist().then(setData);
 
-    const listener = (
-      changes: { [key: string]: chrome.storage.StorageChange },
-      area: string
-    ) => {
+    const listener = (changes: { [key: string]: chrome.storage.StorageChange }, area: string) => {
       if (area === "sync" && changes["watchlist"]) {
         setData(changes["watchlist"].newValue);
       }

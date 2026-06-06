@@ -102,11 +102,10 @@ export function GroupList({ data, onSave }: Props) {
                     {expanded ? "▼" : "▶"}
                   </button>
                   <span class="group-name">{group.name}</span>
-                  <span class="group-count">{group.jobs.length} job{group.jobs.length !== 1 ? "s" : ""}</span>
-                  <button
-                    class="btn-remove"
-                    onClick={() => removeGroup(group.id)}
-                  >
+                  <span class="group-count">
+                    {group.jobs.length} job{group.jobs.length !== 1 ? "s" : ""}
+                  </span>
+                  <button class="btn-remove" onClick={() => removeGroup(group.id)}>
                     Remove
                   </button>
                 </div>
