@@ -111,8 +111,10 @@ Load the built `dist/` via `chrome://extensions` → "Load unpacked" while itera
 ### Supply-chain hardening
 
 The committed `.npmrc` blocks lifecycle scripts (`ignore-scripts=true`), refuses package
-versions published within the last 3 days (`min-release-age=3`), pins the registry, and forces
-exact versions on install (`save-exact=true`). If a fresh `npm install` needs to rebuild a
+versions published within the last 3 days (`min-release-age=3`), pins the registry, and writes
+any newly-installed package to `package.json` as an exact version (`save-exact=true`). The
+committed lockfile pins the full dependency tree and is the primary line of defense. If a fresh
+`npm install` needs to rebuild a
 native dependency (e.g. `@resvg/resvg-js` on an unsupported platform), run
 `npm rebuild <package>` explicitly — the lifecycle-script block is the primary execution vector
 for compromised packages, so the rebuild is opt-in.
