@@ -1,7 +1,6 @@
 {
   "manifest_version": 3,
   "name": "GitLab Job Starter",
-  "version": "1.10.0",
   "description": "Automatically trigger matching manual CI jobs on GitLab pipeline pages using configurable name patterns.",
   "background": {
     "service_worker": "src/background/index.ts",
