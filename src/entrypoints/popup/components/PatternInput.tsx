@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks";
-import { JobPattern, MatchType } from "../../types/storage";
+import { JobPattern, MatchType } from "@/types/storage";
 
 interface Props {
   placeholder: string;

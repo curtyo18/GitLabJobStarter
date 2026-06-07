@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "preact/hooks";
-import { SyncStorageData } from "../../types/storage";
-import { getWatchlist, setWatchlist } from "../../shared/storage";
+import { SyncStorageData } from "@/types/storage";
+import { getWatchlist, setWatchlist } from "@/shared/storage";
 
 export function useStorage() {
   const [data, setData] = useState<SyncStorageData>({

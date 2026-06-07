@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks";
-import { SyncStorageData, WatchGroup, JobPattern } from "../../types/storage";
+import { SyncStorageData, WatchGroup, JobPattern } from "@/types/storage";
 import { PatternInput } from "./PatternInput";
 
 interface Props {
