@@ -1,4 +1,4 @@
-import { SyncStorageData, JobPattern } from "../../types/storage";
+import { SyncStorageData, JobPattern } from "@/types/storage";
 import { PatternInput } from "./PatternInput";
 
 interface Props {

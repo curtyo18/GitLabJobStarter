@@ -1,5 +1,5 @@
 import { useState, useEffect } from "preact/hooks";
-import { SyncStorageData } from "../../types/storage";
+import { SyncStorageData } from "@/types/storage";
 
 interface Props {
   data: SyncStorageData;
