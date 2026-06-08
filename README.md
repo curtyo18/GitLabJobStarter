@@ -20,12 +20,12 @@ definitions; it only clicks "play" on manual jobs that already exist, on your be
 ## Install
 
 Until the extension is published to the Chrome Web Store — download the latest
-`gitlab-job-starter-vX.Y.Z.zip` from [Releases](../../releases), unzip, then in Chrome:
+`GitLabJobStarter-<version>.zip` from [Releases](../../releases), unzip, then in Chrome:
 
 1. Visit `chrome://extensions`
 2. Enable Developer Mode (top right)
 3. Click "Load unpacked"
-4. Select the unzipped folder (or the `dist/` folder produced by `npm run build`)
+4. Select the unzipped `GitLabJobStarter/` folder (or the `.output/chrome-mv3` folder produced by `npm run build`)
 
 Pin the toolbar icon to open the popup and configure your patterns.
 
@@ -90,23 +90,25 @@ See `docs/permissions-justification.md` for the per-permission Web Store narrati
 
 ## Development
 
-Requires Node 20+ and **npm 11.10 or newer** — the repo's `.npmrc` uses
+Requires Node 22+ and **npm 11.10 or newer** — the repo's `.npmrc` uses
 [`min-release-age`](https://docs.npmjs.com/cli/v11/using-npm/config#min-release-age) (and other
 supply-chain hardening defaults) which silently no-ops on older npm. If you're on the npm that
-ships with Node 20 (10.x), upgrade with `npm install -g npm@latest`.
+ships with Node 22 (10.x), upgrade with `npm install -g npm@latest`.
 
 ```bash
 npm install
 npm run icons       # generate icon PNGs from src/icons/icon.svg
-npm run dev         # vite watch build into dist/
-npm run build       # production build into dist/
+npm run dev         # WXT dev server (HMR)
+npm run build       # production build → .output/chrome-mv3
 npm run typecheck   # tsc over src/ and the test project
 npm run lint        # prettier --check over src/ and tests/
 npm test            # vitest unit tests
-npm run package     # build + zip dist/ → gitlab-job-starter-vX.Y.Z.zip
+npm run zip         # build + zip → .output/<name>-<version>-chrome.zip
 ```
 
-Load the built `dist/` via `chrome://extensions` → "Load unpacked" while iterating.
+Load the built `.output/chrome-mv3` via `chrome://extensions` → "Load unpacked" while iterating.
+Releases are cut by CI on tag push (`.github/workflows/release.yml`), which publishes both the flat
+Web Store zip and a folder-wrapped `GitLabJobStarter/` zip for unpacked installs.
 
 ### Supply-chain hardening
 
@@ -122,23 +124,24 @@ for compromised packages, so the rebuild is opt-in.
 ### Project structure
 
 ```
-manifest.json              MV3 manifest (permissions, content scripts, action popup)
-vite.config.ts             vite + vite-plugin-web-extension build
+wxt.config.ts              WXT config — generates the MV3 manifest (permissions, content scripts, action popup)
 src/
-  background/              minimal MV3 service worker (the content script owns polling)
-  content/                 pipeline-page content script + in-page widget (vanilla DOM)
-    index.ts               polling loop: enumerate manual jobs, match, play
+  entrypoints/
+    background.ts          minimal MV3 service worker (the content script owns polling)
+    gitlab.content.ts      pipeline-page content script (*/-/pipelines/*); builds the in-page
+                           widget via createShadowRootUi (Shadow DOM)
+    popup/                 Preact popup UI for configuring patterns/groups
+      App.tsx, components/, hooks/, index.html, popup.css
+  content/
     csrfToken.ts           reads the page's CSRF <meta> token
-    widget.ts / widget.css the in-page control + log widget
-  popup/                   Preact popup UI for configuring patterns/groups
-    App.tsx, components/, hooks/
+    widget.css             widget styles (emitted as content-scripts/gitlab.css via cssInjectionMode:'ui')
   shared/
     gitlabApi.ts           GitLab REST calls + job-play (URL construction, pagination)
     patterns.ts            pure pattern-matching logic
     storage.ts             typed chrome.storage.sync wrapper + legacy migration
     constants.ts
   types/                   GitLab API + storage type definitions
-scripts/                   icon generation + extension packaging
+scripts/                   icon generation (generate-icons.mjs)
 tests/unit/                vitest unit tests for the pure-logic modules
 docs/                      privacy.html, permissions-justification.md, screenshots
 ```
