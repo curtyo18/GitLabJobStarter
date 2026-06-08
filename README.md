@@ -19,15 +19,19 @@ definitions; it only clicks "play" on manual jobs that already exist, on your be
 
 ## Install
 
-Until the extension is published to the Chrome Web Store — download the latest
-`GitLabJobStarter-<version>.zip` from [Releases](../../releases), unzip, then in Chrome:
+**[Add to Chrome — Chrome Web Store](https://chromewebstore.google.com/detail/gitlab-job-starter/gjhclpmepilfhndfhceekhjlbpbndghd)**
+
+Pin the toolbar icon to open the popup and configure your patterns.
+
+### From source (development / latest build)
+
+To run an unreleased build, download the latest `GitLabJobStarter-<version>.zip`
+from [Releases](../../releases), unzip, then in Chrome:
 
 1. Visit `chrome://extensions`
 2. Enable Developer Mode (top right)
 3. Click "Load unpacked"
 4. Select the unzipped `GitLabJobStarter/` folder (or the `.output/chrome-mv3` folder produced by `npm run build`)
-
-Pin the toolbar icon to open the popup and configure your patterns.
 
 ## Usage
 
