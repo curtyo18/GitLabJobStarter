@@ -89,8 +89,8 @@ The extension talks only to the GitLab instance you are logged into and viewing.
 store credentials, read cookies/passwords/history, or transmit any data to the author or any
 third party.
 
-See `docs/permissions-justification.md` for the per-permission Web Store narrative and
-`docs/privacy.html` for the privacy policy.
+See `docs/privacy.html` for the privacy policy and `docs/store/listing.md` for the full
+Chrome Web Store submission pack (dashboard copy and permission justifications).
 
 ## Development
 
@@ -147,7 +147,7 @@ src/
   types/                   GitLab API + storage type definitions
 scripts/                   icon generation (generate-icons.mjs)
 tests/unit/                vitest unit tests for the pure-logic modules
-docs/                      privacy.html, permissions-justification.md, screenshots
+docs/                      privacy.html, store/ (Web Store listing pack), screenshot.png
 ```
 
 ### Architecture
